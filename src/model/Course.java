@@ -138,4 +138,27 @@ public class Course {
         }
     }
 
+    public String showProjects() {
+        StringBuilder sb = new StringBuilder();
+
+        int count = 1;
+        for (Project p : myProjects) {
+            sb.append(count++)
+            .append("- ")
+            .append(p.getName())
+            .append(" ")
+            .append("ID: ")
+            .append(p.getID())
+            .append(" Description: ")
+            .append(p.getDescription())
+            .append("\n");
+        }
+
+        if (sb.length() == 0) {
+            return "No projects registered. \n";
+        }
+
+        return sb.toString();
+    }
+
 }

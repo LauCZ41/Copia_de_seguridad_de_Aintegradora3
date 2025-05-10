@@ -38,6 +38,11 @@ public class Controller {
         return "added professor ID: " + uId + "\n" ;
     }
 
+    public String registerResult(String date, String studentGroup, String iD){
+
+       return "asdf"; 
+    }
+
     public boolean searchSameProfessor(String id) {
         for (Professor p : myProfessors) {
             if (p.getId().equalsIgnoreCase(id)) {
@@ -57,6 +62,11 @@ public class Controller {
 
     public String generateProject() {
         return "Pro-" + UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    public String generateResultID(String projectID, String number, String studentGroup){
+        String x = UUID.randomUUID().toString().substring(0, 8);
+        return ""+projectID+"_"+ x +"_"+number+"_"+studentGroup;
     }
 
     public String registerProject(String courseId, String name, ArrayList<String> keyWords,String description ,ArrayList<String>  associatedBusiness, String link, String semester, int typeOfProjectN){
@@ -88,8 +98,17 @@ public class Controller {
         return false;
     }
 
-    public String searchProject(String projectID){
-        return projectID;
+    // public String searchProject(String projectID){
+    //     return projectID;
+    // }
+
+    public boolean searchProjectt(String porjectID){
+        boolean a = false;
+        for(Course c: myCourses){
+          a = c.searchProject(porjectID);
+          return a;
+        }
+        return a;
     }
 
     public String displayProjectInfoGlobal(String projectID) {
@@ -188,5 +207,42 @@ public class Controller {
             return "Course or professor not found. \n";
         }
     }
+
+    public String searchProfessor(String id){
+        for(Professor p: myProfessors){
+            if(p.getID().equals(id)){
+                return "Searching...";
+            }
+        }
+        return "This id does not match with any Professor";
+    }
+
+    public String registerResult(String link, String description, String uniqIdentificator, String projectID){
+        for(Course c: myCourses){
+            if(c.searchProject(projectID)){
+                
+            }
+        }
+        return "dsfsd";
+    }
+
+
+
+
+    public String showAllProjects(){
+        StringBuilder sb = new StringBuilder();
+
+        for (Course c : myCourses) {
+            sb.append("Course: ").append(c.getName()).append("\n");
+            sb.append(c.showProjects()).append("\n");
+        }
+
+        if (sb.length() == 0) {
+            return "There are no projects.";
+        }
+
+        return sb.toString();
+    }
+
 
 }

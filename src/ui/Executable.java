@@ -24,8 +24,10 @@ public class Executable{
             System.out.println("3 - Register Poyect");
             System.out.println("4 - Search a project ");
             System.out.println("5 - Edit project information ");
-            System.out.println("6 - Link Course and professor");
-            System.out.println("0 - Exit");
+            System.out.println("6 - Link Course or professor");
+            System.out.println("7 - Add results ");
+            System.out.println("8 - Search projects with no results ");
+            System.out.println("0 - Exit \n");
             try {
                 option = Integer.parseInt(reader.nextLine());
             } catch (NumberFormatException e) {
@@ -42,8 +44,13 @@ public class Executable{
                 case 4: searchProject();
                     break;
                 case 5: editProjectInfo();
+                // detener ejecucion si no se encuentra el codigo
                     break;
                 case 6: linkCoursAndProfessor();
+                    break;
+                case 7: addResults();
+                    break;
+                case 8: projectsWithNoResults();
             }
         } while (option != 0);
     }
@@ -116,8 +123,15 @@ public class Executable{
             } while (idType<0 || idType>4);
             System.out.println("Enter the id");
             id= reader.nextLine();
-            System.out.println("Enter the email ");
-            email= reader.nextLine();
+            boolean key = false;
+            do { 
+                System.out.println("Enter the email ");
+                email= reader.nextLine();
+                key = validEmail(email);
+                if(!key){
+                    System.out.println("That is not a valid email, try again");
+                }
+            } while (!key);
             newP = myController.searchSameProfessor(id);
             if (!newP) {
                 System.out.println("A professor with that ID already exists. Please try again.");
@@ -134,7 +148,7 @@ public class Executable{
         boolean end = false;
         do { 
              
-            System.out.println("Enter the code of the cours you want to link the project to");
+            System.out.println("Enter the code of the coures you want to link the project to");
             courseCode = reader.nextLine();
             System.out.println("Enter the name of the project");
             name = reader.nextLine();
@@ -314,6 +328,48 @@ public class Executable{
                 break;
 
         }
+    }
+
+    public static boolean validEmail(String email){
+        return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    public static void addResults(){
+        System.out.println("These are the existing projects:");
+        System.out.println(myController.showAllProjects());
+        boolean founded = false;
+        do { 
+            System.out.println("Type the ID of the project you want to add results ");
+            String projectID=reader.nextLine();
+            founded = myController.searchProjectt(projectID);
+            if(!founded){
+                System.out.println("There is not a Project with that ID, please try again");
+            }
+        } while (!founded);
+        System.out.println("Enter the name date of the result. (day/month/year)");
+        String fecha = reader.nextLine();
+        System.out.println("Enter the stuten group (GX)");
+        String studentGroup = reader.nextLine();
+        int option = 99;
+        do { 
+            System.out.println("Enter the type of assignament you want to add");
+            System.out.println("1- Repossitory");
+            System.out.println("2- Document");
+            System.out.println("3- Artefact");
+            try {
+                    option= Integer.parseInt(reader.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("That is not a possible option, try again");
+                }
+        } while (option<0 || option>3);
+
+    }
+
+
+    public static void projectsWithNoResults(){
+        System.out.println("Entern the professor id");
+        String id = reader.nextLine();
+        System.out.println(myController.searchProfessor(id));
     }
 }
 

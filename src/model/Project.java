@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import javax.naming.spi.DirStateFactory;
 
 public class Project {
     private String uniqIdentificator;
@@ -11,6 +12,9 @@ public class Project {
     private String semester;
     private TypeOfProject typeOfProject;
 
+    //relations
+    private ArrayList<DirStateFactory.Result> myResults = new ArrayList<>();
+    //max 3
 
     public Project(String name, ArrayList<String> keyWords,String description ,ArrayList<String>  associatedBusiness, String link, String semester,TypeOfProject typeOfProject, String uniqIdentificator){
         this.name = name;
@@ -53,6 +57,11 @@ public class Project {
         return false;
     }
 
+    public String addResult(String link, String description, String uniqIdentificator){
+        myResults.add(new Result(link, description, uniqIdentificator));
+        return "Added result ";
+    }
+
     @Override
     public String toString() {
         return "Project ID: " + uniqIdentificator + "\n" +
@@ -67,6 +76,14 @@ public class Project {
 
     public String getID(){
         return uniqIdentificator;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getDescription(){
+        return description;
     }
 
     public ArrayList<String> getKeyWords(){
