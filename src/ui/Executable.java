@@ -334,42 +334,139 @@ public class Executable{
         return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
+    public static boolean validLink(String link) {
+        if (link == null) return false;
+        return (link.startsWith("http://") || link.startsWith("https://")) && link.contains(".");
+    }
+
+
     public static void addResults(){
         System.out.println("These are the existing projects:");
         System.out.println(myController.showAllProjects());
         boolean founded = false;
+        String projectID;
+        String number = "s";
         do { 
             System.out.println("Type the ID of the project you want to add results ");
-            String projectID=reader.nextLine();
+            projectID=reader.nextLine();
             founded = myController.searchProjectt(projectID);
             if(!founded){
                 System.out.println("There is not a Project with that ID, please try again");
             }
-        } while (!founded);
-        System.out.println("Enter the name date of the result. (day/month/year)");
-        String fecha = reader.nextLine();
-        System.out.println("Enter the stuten group (GX)");
-        String studentGroup = reader.nextLine();
-        int option = 99;
-        do { 
-            System.out.println("Enter the type of assignament you want to add");
-            System.out.println("1- Repossitory");
-            System.out.println("2- Document");
-            System.out.println("3- Artefact");
-            try {
-                    option= Integer.parseInt(reader.nextLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("That is not a possible option, try again");
-                }
-        } while (option<0 || option>3);
+            System.out.println("Enter the name date of the result. (day/month/year)");
+            String date = reader.nextLine();
+            System.out.println("Enter the stuten group (GX)");
+            String studentGroup = reader.nextLine();
+            String recurseID = myController.registerResult(date, studentGroup, projectID, number);
+            System.out.println("The result has been sucsesfully created, it's ID is: "+ recurseID+"\n");
+            // -------
 
+            System.out.println("Now let's add asignaments (max 3) type exit to skip the proccess for now");
+            String quantity = myController.maxAssignaments(projectID, recurseID);
+            String a = "";
+            int option = 99;
+            do { 
+                do { 
+                    System.out.println("Enter the type of assignament you want to add or 0 to stop the procces");
+                    System.out.println("1- Repossitory");
+                    System.out.println("2- Document");
+                    System.out.println("3- Artefact");
+                    try {
+                            option= Integer.parseInt(reader.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("That is not a possible option, try again");
+                        }
+                } while (option<-1|| option>3);
+                
+                switch (option) {
+                    case 1: addRepo();
+                        break;
+                    case 2: addDocument();
+                        break;
+                    case 3: addArtefact();
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
+            } while (quantity.equals("3") || option == 0);
+        } while (!founded);
     }
 
+    public static void addRepo(){
+        int numberOfDocuments = 0;
+        boolean valid = false;
+        do { 
+            try {
+                System.out.println("Enter the amount of documents the repositori has"); 
+                numberOfDocuments = Integer.parseInt(reader.nextLine());
+                valid = true;
+            } catch (NumberFormatException e) {
+                System.out.println("this is not a number \n ");
+            }
+        } while (!valid);
+        String link = "";
+        boolean key = false;
+        do { 
+            System.out.println("Enter the link of the repository");
+            link= reader.nextLine();
+            key = validLink(link);
+            if(!key){
+                System.out.println("That is not a valid link, try again");
+            }
+        } while (!key);
+        int developmentPhase = selectDevelopmentPhase();
+    }
+
+    public static void addDocument(){
+        String link = "";
+        boolean key = false;
+        do { 
+            System.out.println("Enter the link of the document");
+            link= reader.nextLine();
+            key = validLink(link);
+            if(!key){
+                System.out.println("That is not a valid link, try again");
+            }
+        } while (!key);
+        int developmentPhase = selectDevelopmentPhase();
+    }
 
     public static void projectsWithNoResults(){
         System.out.println("Entern the professor id");
         String id = reader.nextLine();
         System.out.println(myController.searchProfessor(id));
     }
-}
 
+    public static int addArtefact(){
+        System.out.println("Select the artefact type");
+        int option = 0;
+        do { 
+            System.out.println("1 -Requirements specification");
+            System.out.println("2 -Class diagram");
+            System.out.println("3 -Infographic");
+            System.out.println("4 -Data model");
+            System.out.println("5 -Test plan");
+            System.out.println("6 -Deployment diagram");
+            try {
+                    option= Integer.parseInt(reader.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("That is not a possible option, try again");
+                }
+        } while (true);
+    }
+
+    public static int selectDevelopmentPhase(){
+        System.out.println("Now select the phase of software develpmente: ");
+        int option = 0;
+        do { 
+            System.out.println("1 -Requirements analysis");
+            System.out.println("2 -Design");
+            System.out.println("3 -Construction");
+            System.out.println("4 -Test/evidence");
+            System.out.println("5 -Deployment");
+        } while (option<1 || option>5);
+        return option;
+    }
+
+
+}

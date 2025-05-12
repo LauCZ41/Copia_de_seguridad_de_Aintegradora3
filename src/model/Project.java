@@ -1,6 +1,6 @@
 package model;
 import java.util.ArrayList;
-import javax.naming.spi.DirStateFactory;
+
 
 public class Project {
     private String uniqIdentificator;
@@ -13,7 +13,7 @@ public class Project {
     private TypeOfProject typeOfProject;
 
     //relations
-    private ArrayList<DirStateFactory.Result> myResults = new ArrayList<>();
+    private ArrayList<Result> myResults = new ArrayList<>();
     //max 3
 
     public Project(String name, ArrayList<String> keyWords,String description ,ArrayList<String>  associatedBusiness, String link, String semester,TypeOfProject typeOfProject, String uniqIdentificator){
@@ -60,6 +60,14 @@ public class Project {
     public String addResult(String link, String description, String uniqIdentificator){
         myResults.add(new Result(link, description, uniqIdentificator));
         return "Added result ";
+    }
+    public String masAssignament(String iD){
+        for(Result r: myResults){
+            if(r.getID().equals(iD)){
+                return r.maxAssignaments();
+            }
+        }
+        return "x";
     }
 
     @Override

@@ -27,6 +27,7 @@ public class Course {
         return "Project added";
     }
 
+  
     public boolean searchProject(String projectID){
         for(Project p : myProjects){
             if(p.getID().equals(projectID)){
@@ -85,7 +86,6 @@ public class Course {
         return "Error";
     }
 
-
     public String changeKeyWordList(String projectID, ArrayList<String> deleteKeyWords, ArrayList<String> newKeyWords) {
         for (Project p : myProjects) {
             if (p.getID().equals(projectID)) {
@@ -103,8 +103,6 @@ public class Course {
         return "ID NOT FOUND";
     }
     
-    
-
     public String changeAssosiatedBussinesList(String projectID, ArrayList<String> deletBussines, ArrayList<String> neweBussines) {
         for (Project p : myProjects) {
             if (p.getID().equals(projectID)) {
@@ -161,4 +159,20 @@ public class Course {
         return sb.toString();
     }
 
+    public String addResult(String link, String description, String uniqIdentificator, String projectID){
+        for(Project p:myProjects){
+            p.addResult(link, description, uniqIdentificator);
+            return "";
+        }
+        return  "";
+    }
+
+    public String maxAssignaments(String projectID, String recurseID){
+        for(Project p:myProjects){
+            if(p.getID().equals(projectID)){
+                return p.masAssignament(recurseID);
+            }
+        }
+        return "x";
+    }
 }

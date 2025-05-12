@@ -38,10 +38,6 @@ public class Controller {
         return "added professor ID: " + uId + "\n" ;
     }
 
-    public String registerResult(String date, String studentGroup, String iD){
-
-       return "asdf"; 
-    }
 
     public boolean searchSameProfessor(String id) {
         for (Professor p : myProfessors) {
@@ -217,16 +213,17 @@ public class Controller {
         return "This id does not match with any Professor";
     }
 
-    public String registerResult(String link, String description, String uniqIdentificator, String projectID){
+    public String registerResult(String date, String studentGroup, String projectID, String number){
+        String uniqIdentificator = generateResultID(projectID, number, studentGroup);
         for(Course c: myCourses){
             if(c.searchProject(projectID)){
-                
+                c.addResult(date, studentGroup, uniqIdentificator,  projectID);
+                return uniqIdentificator;
             }
         }
-        return "dsfsd";
+
+        return "ERROR";
     }
-
-
 
 
     public String showAllProjects(){
@@ -244,5 +241,13 @@ public class Controller {
         return sb.toString();
     }
 
+    public String maxAssignaments(String projectID, String recurseID){
+        for(Course c: myCourses){
+            if(c.searchProject(projectID)){
+                return c.maxAssignaments(projectID, recurseID);
+            }
+        }
+        return "x";
+    }
 
 }
