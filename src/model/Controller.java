@@ -146,7 +146,7 @@ public class Controller {
     public String changeAssosiatedBussinesList(String projectID, ArrayList<String> deletBussines, ArrayList<String> neweyBussines){
         for (Course c : myCourses) {
             if (c.searchProject(projectID)) {
-                return c.changeKeyWordList(projectID, deletBussines, neweyBussines);
+                return c.changeAssosiatedBussinesList(projectID, deletBussines, neweyBussines);
             }
         }
         return "Course not found\n";

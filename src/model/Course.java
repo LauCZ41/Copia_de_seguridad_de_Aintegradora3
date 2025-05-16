@@ -89,7 +89,6 @@ public class Course {
     public String changeKeyWordList(String projectID, ArrayList<String> deleteKeyWords, ArrayList<String> newKeyWords) {
         for (Project p : myProjects) {
             if (p.getID().equals(projectID)) {
-
                 for (int i = 0; i < deleteKeyWords.size(); i++) {
                     String wordToDelete = deleteKeyWords.get(i);
                     p.removeKeyword(wordToDelete);
@@ -106,12 +105,13 @@ public class Course {
     public String changeAssosiatedBussinesList(String projectID, ArrayList<String> deletBussines, ArrayList<String> neweBussines) {
         for (Project p : myProjects) {
             if (p.getID().equals(projectID)) {
-                for (String word : deletBussines) {
-                    p.removeAssociatedBusiness(word);
-
+                for (int i = 0; i< deletBussines.size();i++){
+                    String wordToDelete = deletBussines.get(i);
+                    p.removeAssociatedBusiness(wordToDelete);
                 }
+
                 p.addAssociatedBusinesses(neweBussines);
-                return "Key words updated successfully.";
+                return "Assosiated bussines updated successfully.";
             }
         }
         return"ID NOT FOUND";

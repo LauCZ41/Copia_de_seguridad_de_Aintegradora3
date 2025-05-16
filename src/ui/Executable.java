@@ -189,8 +189,7 @@ public class Executable{
             if(!end){
                 System.out.println("The course id does not exist, try again \n");
             } else{
-                System.out.println(myController.registerProject(courseCode, name, keyWords, description, associatedBusiness, link, semester, projectType));
-                System.out.println("Project added succesfuly \n");
+                System.out.println(myController.registerProject(courseCode, name, keyWords, description, associatedBusiness, link, semester, projectType)+"\n");
             }
         } while (!end);
     }
@@ -202,10 +201,11 @@ public class Executable{
     }
 
     public static void editProjectInfo(){
+        System.out.println("***Editing***");
         System.out.println("Enter the ID of the project you want to add");
         String projectID = reader.nextLine();
         int option = 0;
-
+        System.out.println(myController.displayProjectInfoGlobal(projectID)+ "\n");
         do { 
             System.out.println("Enter the number of what you want to edit");
             System.out.println("1 - Name");
@@ -294,6 +294,7 @@ public class Executable{
                     newBussines.add(keyword);
                 } while (true);
                 myController.changeAssosiatedBussinesList(projectID, deletBussines, newBussines);
+                break;
         }
     }
 
@@ -353,9 +354,9 @@ public class Executable{
             if(!founded){
                 System.out.println("There is not a Project with that ID, please try again");
             }
-            System.out.println("Enter the name date of the result. (day/month/year)");
+            System.out.println("Enter the date of the result. (day/month/year)");
             String date = reader.nextLine();
-            System.out.println("Enter the stuten group (GX)");
+            System.out.println("Enter the student group (G1 , G2, G3...)");
             String studentGroup = reader.nextLine();
             String recurseID = myController.registerResult(date, studentGroup, projectID, number);
             System.out.println("The result has been sucsesfully created, it's ID is: "+ recurseID+"\n");
@@ -397,7 +398,7 @@ public class Executable{
         boolean valid = false;
         do { 
             try {
-                System.out.println("Enter the amount of documents the repositori has"); 
+                System.out.println("Enter the amount of documents the repository has"); 
                 numberOfDocuments = Integer.parseInt(reader.nextLine());
                 valid = true;
             } catch (NumberFormatException e) {
@@ -464,9 +465,12 @@ public class Executable{
             System.out.println("3 -Construction");
             System.out.println("4 -Test/evidence");
             System.out.println("5 -Deployment");
+            try {
+                option = Integer.parseInt(reader.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("That is not a number, try again");
+            }
         } while (option<1 || option>5);
         return option;
     }
-
-
 }
