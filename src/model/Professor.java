@@ -49,6 +49,14 @@ public class Professor{
         }
     }
 
+    public StringBuilder searchProjectsNoResults(){
+        StringBuilder message = new StringBuilder();
+        for(Course c: courses){
+            message.append(c.projectsWithNoResult());
+        }
+        return message;
+    }
+
     public ArrayList<Course> getCourses() {
         return courses;
     }

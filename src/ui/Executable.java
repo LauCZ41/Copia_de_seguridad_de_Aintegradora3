@@ -9,12 +9,15 @@ public class Executable{
 
     public static Controller myController;
     public static Scanner reader = new Scanner(System.in);
-    public static void main(String[] args) {
+    public Executable(){
         myController = new Controller();
-        menu();
+    }
+    public static void main(String[] args) {
+        Executable exe = new Executable();
+        exe.menu();
     }
 
-    public static void menu(){
+    public void menu(){
         int option = 3549;
         do{
             System.out.println("*** Welcome to the admin software of Facultad Barberi de Ingeniería, Diseño y Ciencias Aplicadas ***");
@@ -44,7 +47,6 @@ public class Executable{
                 case 4: searchProject();
                     break;
                 case 5: editProjectInfo();
-                // detener ejecucion si no se encuentra el codigo
                     break;
                 case 6: linkCoursAndProfessor();
                     break;
@@ -55,7 +57,7 @@ public class Executable{
         } while (option != 0);
     }
 
-    public static void registerCourse(){
+    public void registerCourse(){
         boolean registered = false;
         System.out.println("*** Adding a Course ***");
         System.out.println("Enter the name of the course");
@@ -90,18 +92,21 @@ public class Executable{
         System.out.println("Link "+ name +" Course to a professor");
         System.out.println("Enter the professor ID you want to link to this course ");
         System.out.println("Type exit if you want to skip this step for now, you can do it latter ;)" );
+        System.out.println("This are the existant Professors: ");
+        System.out.println(myController.showAllProfessors());
         while (!flag) {
             String professorID = reader.nextLine().trim();
             if (professorID.equalsIgnoreCase("exit")) {
                 flag = true;
             } else {
-                myController.linkCourseToProfessor(professorID, courseID);
+                System.out.println(myController.linkCourseToProfessor(professorID, courseID));
+                flag = true;
             }
 
         }
     }
 
-    public static void registerProfesor(){
+    public void registerProfesor(){
         System.out.println("*** Adding a Professor ***");
         boolean newP = false;
         String name;
@@ -140,14 +145,15 @@ public class Executable{
         System.out.println(myController.registerProfesor(name, id, email, idType));
     }
 
-    public static void registerProject(){
+    public void registerProject(){
         int projectType = 0;
         String courseCode, name, description, link, semester;
         ArrayList<String> keyWords = new ArrayList<>();
         ArrayList<String> associatedBusiness = new ArrayList<>();
         boolean end = false;
         do { 
-             
+            System.out.println("These are the existant Courses: ");
+            System.out.println(myController.showAllCourses());
             System.out.println("Enter the code of the coures you want to link the project to");
             courseCode = reader.nextLine();
             System.out.println("Enter the name of the project");
@@ -194,13 +200,13 @@ public class Executable{
         } while (!end);
     }
 
-    public static void searchProject(){
+    public void searchProject(){
         System.out.println("Enter the project id: ");
         String projectID = reader.nextLine();
         System.out.println(myController.displayProjectInfoGlobal(projectID));
     }
 
-    public static void editProjectInfo(){
+    public void editProjectInfo(){
         System.out.println("***Editing***");
         System.out.println("Enter the ID of the project you want to add");
         String projectID = reader.nextLine();
@@ -298,13 +304,14 @@ public class Executable{
         }
     }
 
-    public static void linkCoursAndProfessor(){
+    public void linkCoursAndProfessor(){
         int option = 0;
         do { 
             System.out.println("Enter the number og the option you want to slect");
             System.out.println("1 - Link a PROFESSOR to a course");
             System.out.println("2 - link a COURSE to a Profesor");
             System.out.println("--A professor can have more than one course -- ");
+            System.out.println("*These two options make the same process the difference is the order you put the information* ");
             try {
                 option = Integer.parseInt(reader.nextLine());
             } catch (NumberFormatException e) {
@@ -315,14 +322,22 @@ public class Executable{
             }
         } while (option<0 || option>2);
         switch(option){
-            case 1: System.out.println("Enter the professor's ID");
+            case 1: System.out.println("These are the existant professors: ");
+                System.out.println(myController.showAllProfessors());
+                System.out.println("Enter the professor's ID");
                 String professorID = reader.nextLine();
+                System.out.println("These are the existant Courses: ");
+                System.out.println(myController.showAllCourses());
                 System.out.println("Enter the course ID");
                 String courseID = reader.nextLine();
                 System.out.println(myController.linkProfessorToCourse(courseID, professorID));myController.linkProfessorToCourse(courseID, professorID);
                 break;
-            case 2: System.out.println("Enter the course ID");
+            case 2: System.out.println("These are the existant Courses: ");
+                System.out.println(myController.showAllCourses());
+                System.out.println("Enter the course ID");
                 courseID = reader.nextLine();
+                System.out.println("These are the existant professors: ");
+                System.out.println(myController.showAllProfessors());
                 System.out.println("Enter the Professor's ID");
                 professorID = reader.nextLine();
                 System.out.println(myController.linkCourseToProfessor(professorID, courseID));
@@ -331,69 +346,80 @@ public class Executable{
         }
     }
 
-    public static boolean validEmail(String email){
+    public boolean validEmail(String email){
         return email != null && email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
-    public static boolean validLink(String link) {
+    public boolean validLink(String link) {
         if (link == null) return false;
         return (link.startsWith("http://") || link.startsWith("https://")) && link.contains(".");
     }
 
-
-    public static void addResults(){
+    public void addResults(){
         System.out.println("These are the existing projects:");
         System.out.println(myController.showAllProjects());
-        boolean founded = false;
-        String projectID;
-        String number = "s";
-        do { 
-            System.out.println("Type the ID of the project you want to add results ");
-            projectID=reader.nextLine();
-            founded = myController.searchProjectt(projectID);
-            if(!founded){
-                System.out.println("There is not a Project with that ID, please try again");
-            }
-            System.out.println("Enter the date of the result. (day/month/year)");
-            String date = reader.nextLine();
-            System.out.println("Enter the student group (G1 , G2, G3...)");
-            String studentGroup = reader.nextLine();
-            String recurseID = myController.registerResult(date, studentGroup, projectID, number);
-            System.out.println("The result has been sucsesfully created, it's ID is: "+ recurseID+"\n");
-            // -------
 
-            System.out.println("Now let's add asignaments (max 3) type exit to skip the proccess for now");
-            String quantity = myController.maxAssignaments(projectID, recurseID);
-            String a = "";
-            int option = 99;
-            do { 
-                do { 
-                    System.out.println("Enter the type of assignament you want to add or 0 to stop the procces");
-                    System.out.println("1- Repossitory");
-                    System.out.println("2- Document");
-                    System.out.println("3- Artefact");
-                    try {
-                            option= Integer.parseInt(reader.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("That is not a possible option, try again");
-                        }
-                } while (option<-1|| option>3);
-                
-                switch (option) {
-                    case 1: addRepo();
-                        break;
-                    case 2: addDocument();
-                        break;
-                    case 3: addArtefact();
-                        break;
-                    default:
-                        System.out.println("Error");
+        System.out.println("Type the ID of the project you want to add results: ");
+        String projectID = reader.nextLine();
+
+        boolean founded = myController.searchProjectt(projectID);
+
+        if (!founded) {
+            System.out.println("There is no project with that ID. Process aborted.");
+            return; 
+        }
+
+        System.out.println("Enter the date of the result. (day/month/year)");
+        String date = reader.nextLine();
+
+        System.out.println("Enter the student group (G1, G2, G3...)");
+        String studentGroup = reader.nextLine();
+
+        String number = myController.maxResult(projectID);
+        boolean maxResult = true;
+        if(number.equals("3")){
+            maxResult= false;
+            System.out.println("This project already has 3 Results");
+            return;
+        } else{
+            maxResult =true;
+        }
+
+        String recurseID = myController.registerResult(date, studentGroup, projectID, number);
+        System.out.println("The result has been successfully created. Its ID is: " + recurseID + "\n");
+
+        System.out.println("Now let's add assignments (max 3). Type 0 to skip the process.");
+        //String quantity = myController.maxAssignaments(projectID, recurseID);
+        int option = 99;
+
+        do {
+            do {
+                System.out.println("Enter the type of assignment you want to add or 0 to stop:");
+                System.out.println("1- Repository");
+                System.out.println("2- Document");
+                System.out.println("3- Artefact");
+
+                try {
+                    option = Integer.parseInt(reader.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("That is not a valid option, try again.");
                 }
-            } while (quantity.equals("3") || option == 0);
-        } while (!founded);
+
+            } while (option < 0 || option > 3);
+
+            switch (option) {
+                case 1: addRepo(); 
+                    break;
+                case 2: addDocument(); 
+                    break;
+                case 3: addArtefact(); 
+                    break;
+                case 0: System.out.println("Assignment process skipped."); break;
+            }
+        } while (option != 0);
     }
 
-    public static void addRepo(){
+    public void addRepo(){
         int numberOfDocuments = 0;
         boolean valid = false;
         do { 
@@ -418,7 +444,7 @@ public class Executable{
         int developmentPhase = selectDevelopmentPhase();
     }
 
-    public static void addDocument(){
+    public void addDocument(){
         String link = "";
         boolean key = false;
         do { 
@@ -432,13 +458,25 @@ public class Executable{
         int developmentPhase = selectDevelopmentPhase();
     }
 
-    public static void projectsWithNoResults(){
-        System.out.println("Entern the professor id");
+    public void projectsWithNoResults() {
+        System.out.println("These are the existing professors: ");
+        System.out.println(myController.showAllProfessors());
+
+        System.out.println("Enter the professor ID:");
         String id = reader.nextLine();
-        System.out.println(myController.searchProfessor(id));
+
+        boolean foundedProfessor = myController.searchProfessor(id);
+        if (!foundedProfessor) {
+            System.out.println("There is no professor with that ID.\n");
+            return; 
+        }
+        StringBuilder message = myController.projectsWithNoResults(id);
+
+        System.out.println("Projects without results:");
+        System.out.println(message.toString());
     }
 
-    public static int addArtefact(){
+    public int addArtefact(){
         System.out.println("Select the artefact type");
         int option = 0;
         do { 
@@ -456,7 +494,7 @@ public class Executable{
         } while (true);
     }
 
-    public static int selectDevelopmentPhase(){
+    public int selectDevelopmentPhase(){
         System.out.println("Now select the phase of software develpmente: ");
         int option = 0;
         do { 
@@ -473,4 +511,7 @@ public class Executable{
         } while (option<1 || option>5);
         return option;
     }
+
 }
+
+

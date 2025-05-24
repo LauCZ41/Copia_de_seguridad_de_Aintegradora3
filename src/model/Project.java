@@ -2,6 +2,7 @@ package model;
 import java.util.ArrayList;
 
 
+
 public class Project {
     private String uniqIdentificator;
     private String name;
@@ -61,14 +62,15 @@ public class Project {
         myResults.add(new Result(link, description, uniqIdentificator));
         return "Added result ";
     }
-    public String masAssignament(String iD){
-        for(Result r: myResults){
-            if(r.getID().equals(iD)){
-                return r.maxAssignaments();
-            }
-        }
-        return "x";
-    }
+
+    // public String masAssignament(String iD){
+    //     for(Result r: myResults){
+    //         if(r.getID().equals(iD)){
+    //             return r.maxAssignaments();
+    //         }
+    //     }
+    //     return "x";
+    // }
 
     @Override
     public String toString() {
@@ -81,6 +83,23 @@ public class Project {
             "Keywords: " + String.join(", ", keyWords) + "\n" +
             "Associated Businesses: " + String.join(", ", associatedBusiness)+ "\n";
     }
+
+    public String maxResults(){
+        if(myResults.size()==3){
+            return "3";
+        } else if(myResults.size()==2){
+            return "2";
+        } else if(myResults.size()==1){
+            return "1";
+        }
+        return "0";
+    }
+
+    public boolean isEmpthyR() {
+        return myResults.isEmpty(); 
+    }
+
+
 
     public String getID(){
         return uniqIdentificator;

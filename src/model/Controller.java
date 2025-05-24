@@ -172,6 +172,7 @@ public class Controller {
 
         if (foundProfessor != null && foundCourse != null) {
             foundProfessor.addCourse(foundCourse); 
+            foundCourse.setProfessor(foundProfessor);
             return "Course assigned to professor successfully.\n";
         } else {
             return "Professor or course not found. \n";
@@ -198,19 +199,20 @@ public class Controller {
     
         if (foundCourse != null && foundProfessor != null) {
             foundCourse.setProfessor(foundProfessor); 
+            foundProfessor.addCourse(foundCourse);
             return "Professor assigned to course successfully. \n";
         } else {
             return "Course or professor not found. \n";
         }
     }
 
-    public String searchProfessor(String id){
+    public boolean  searchProfessor(String id){
         for(Professor p: myProfessors){
             if(p.getID().equals(id)){
-                return "Searching...";
+                return true;
             }
         }
-        return "This id does not match with any Professor";
+        return false;
     }
 
     public String registerResult(String date, String studentGroup, String projectID, String number){
@@ -241,13 +243,52 @@ public class Controller {
         return sb.toString();
     }
 
-    public String maxAssignaments(String projectID, String recurseID){
-        for(Course c: myCourses){
-            if(c.searchProject(projectID)){
-                return c.maxAssignaments(projectID, recurseID);
+
+    public String maxResult(String iDproject){
+        for(Course c:myCourses){
+            if(c.searchProject(iDproject)){
+                return c.maxResult(iDproject);
             }
         }
-        return "x";
+        return "Error1";
     }
+
+   public StringBuilder projectsWithNoResults(String professorID) {
+        StringBuilder message = new StringBuilder();
+        for (Professor p : myProfessors) {
+            if (p.getID().equals(professorID)) {
+                message.append(p.searchProjectsNoResults());
+                return message;
+            }
+        }
+        message.append("Professor not found.\n");
+        return message;
+    }
+
+    public StringBuilder showAllProfessors(){
+        StringBuilder message = new StringBuilder();
+        for(Professor p:myProfessors){
+            message.append("ID: "+p.getID()+" Name:"+p.getName()+"\n");
+        }
+        return message;
+    }
+
+    public StringBuilder showAllCourses(){
+        StringBuilder message = new StringBuilder();
+        for(Course c: myCourses){
+            message.append("ID: "+c.getCode()+" Name:"+c.getName()+"\n");
+        }
+        return message;
+    }
+
+
+    // public String maxAssignaments(String projectID, String recurseID){
+    //     for(Course c: myCourses){
+    //         if(c.searchProject(projectID)){
+    //             return c.maxAssignaments(projectID, recurseID);
+    //         }
+    //     }
+    //     return "x";
+    // }
 
 }

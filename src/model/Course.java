@@ -167,12 +167,40 @@ public class Course {
         return  "";
     }
 
-    public String maxAssignaments(String projectID, String recurseID){
-        for(Project p:myProjects){
-            if(p.getID().equals(projectID)){
-                return p.masAssignament(recurseID);
+    public String maxResult(String iDproject){
+        for(Project p: myProjects){
+            if(p.getID().equals(iDproject)){
+                return p.maxResults();
             }
         }
-        return "x";
+        return "Error";
     }
+
+    public StringBuilder projectsWithNoResult() {
+        StringBuilder message = new StringBuilder();
+        boolean found = false;
+        for (Project p : myProjects) {
+            if (p.isEmpthyR()) {
+                message.append("Project: ").append(p.getName())
+                    .append(" - ID: ").append(p.getID()).append("\n");
+                found = true;
+            }
+        }
+
+        if (!found) {
+            message.append("All projects in this course have at least one result.\n");
+        }
+
+        return message;
+    }
+
+    
+    // public String maxAssignaments(String projectID, String recurseID){
+    //     for(Project p:myProjects){
+    //         if(p.getID().equals(projectID)){
+    //             return p.masAssignament(recurseID);
+    //         }
+    //     }
+    //     return "x";
+    // }
 }
